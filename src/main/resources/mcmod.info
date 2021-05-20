@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "gottacatchemsmall",
+    "name": "GCS",
+    "description": "Sponge plugin for restricting the Pokemon players can catch based on progression",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "Lypaka"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
