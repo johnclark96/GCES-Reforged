@@ -23,30 +23,28 @@ public class SkillsListener {
         String skill = event.getSkill();
         Player player = event.getPlayer();
 
-        if (!ConfigManager.getConfigNode(7, "Skills", "Enable-Skill-Restriction").getBoolean()) {
+        if (ConfigManager.getConfigNode(7, "Skills", "Enable-Skill-Restriction").getBoolean()) {
 
-            return;
+            List<String> blackList = ConfigManager.getConfigNode(7, "Skills", "Blacklist").getList(TypeToken.of(String.class));
+            if (blackList.contains(skill)) {
 
-        }
+                return;
 
-        List<String> blackList = ConfigManager.getConfigNode(7, "Skills", "Blacklist").getList(TypeToken.of(String.class));
-        if (blackList.contains(skill)) {
+            }
 
-            return;
+            if (!ConfigManager.getConfigNode(7, "Skills", "Tiers", skill).isVirtual()) {
 
-        }
+                int tierLevel = AccountHandler.getTierLevel(player, skill);
+                int capLevel = ConfigManager.getConfigNode(7, "Skills", "Tiers", skill, "Tier-" + tierLevel, "Cap-Level").getInt();
+                int skillLevel = AccountsHandler.getLevel(skill, player);
+                String message = ConfigManager.getConfigNode(7, "Skills", "Tiers", skill, "Tier-" + tierLevel, "Message").getString();
 
-        if (!ConfigManager.getConfigNode(7, "Skills", "Tiers", skill).isVirtual()) {
+                if (skillLevel >= capLevel) {
 
-            int tierLevel = AccountHandler.getTierLevel(player, skill);
-            int capLevel = ConfigManager.getConfigNode(7, "Skills", "Tiers", skill, "Tier-" + tierLevel, "Cap-Level").getInt();
-            int skillLevel = AccountsHandler.getLevel(skill, player);
-            String message = ConfigManager.getConfigNode(7, "Skills", "Tiers", skill, "Tier-" + tierLevel, "Message").getString();
+                    event.setCanceled(true);
+                    player.sendMessage(FancyText.getFancyText(message));
 
-            if (skillLevel >= capLevel) {
-
-                event.setCanceled(true);
-                player.sendMessage(FancyText.getFancyText(message));
+                }
 
             }
 
@@ -59,24 +57,29 @@ public class SkillsListener {
 
         String skill = event.getSkill();
         Player player = event.getPlayer();
-        List<String> blackList = ConfigManager.getConfigNode(7, "Skills", "Blacklist").getList(TypeToken.of(String.class));
-        if (blackList.contains(skill)) {
 
-            return;
+        if (ConfigManager.getConfigNode(7, "Skills", "Enable-Skill-Restriction").getBoolean()) {
 
-        }
+            List<String> blackList = ConfigManager.getConfigNode(7, "Skills", "Blacklist").getList(TypeToken.of(String.class));
+            if (blackList.contains(skill)) {
 
-        if (!ConfigManager.getConfigNode(7, "Skills", "Tiers", skill).isVirtual()) {
+                return;
 
-            int tierLevel = AccountHandler.getTierLevel(player, skill);
-            int capLevel = ConfigManager.getConfigNode(7, "Skills", "Tiers", skill, "Tier-" + tierLevel, "Cap-Level").getInt();
-            int skillLevel = AccountsHandler.getLevel(skill, player);
-            String message = ConfigManager.getConfigNode(7, "Skills", "Tiers", skill, "Tier-" + tierLevel, "Message").getString();
+            }
 
-            if (skillLevel >= capLevel) {
+            if (!ConfigManager.getConfigNode(7, "Skills", "Tiers", skill).isVirtual()) {
 
-                event.setCanceled(true);
-                player.sendMessage(FancyText.getFancyText(message));
+                int tierLevel = AccountHandler.getTierLevel(player, skill);
+                int capLevel = ConfigManager.getConfigNode(7, "Skills", "Tiers", skill, "Tier-" + tierLevel, "Cap-Level").getInt();
+                int skillLevel = AccountsHandler.getLevel(skill, player);
+                String message = ConfigManager.getConfigNode(7, "Skills", "Tiers", skill, "Tier-" + tierLevel, "Message").getString();
+
+                if (skillLevel >= capLevel) {
+
+                    event.setCanceled(true);
+                    player.sendMessage(FancyText.getFancyText(message));
+
+                }
 
             }
 
