@@ -1,5 +1,6 @@
 package com.lypaka.gces.gottacatchemsmall.Listeners;
 
+import com.google.common.reflect.TypeToken;
 import com.lypaka.gces.gottacatchemsmall.Config.ConfigManager;
 import com.lypaka.gces.gottacatchemsmall.Utils.AccountHandler;
 import com.lypaka.gces.gottacatchemsmall.Utils.FancyText;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.world.World;
 
 import java.util.List;
 
@@ -24,6 +26,13 @@ public class CatchListener {
     public void onCapture (CaptureEvent.StartCapture event) throws ObjectMappingException {
 
         Player player = (Player) event.player;
+        if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+
+            List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+            World world = player.getWorld();
+            if (worlds.contains(world.getName())) return;
+
+        }
         int pokeLevel = event.getPokemon().getPokemonData().getLevel();
 
         if (event.getPokemon().getPokemonData().isShiny() && !TierHandler.areShiniesRestricted()) return;
@@ -247,6 +256,6 @@ public class CatchListener {
                 pokemon.contains("Necrozma") || pokemon.contains("Meloetta") || pokemon.contains("Genesect") || pokemon.contains("Diancie") || pokemon.contains("Hoopa") ||
                 pokemon.contains("Volcanion") || pokemon.contains("Magearna") || pokemon.contains("Marshadow") || pokemon.contains("Zeraora") || pokemon.contains("Zacian") ||
                 pokemon.contains("Zamazenta") || pokemon.contains("Eternatus") || pokemon.contains("Meltan") || pokemon.contains("Melmetal") || pokemon.contains("Zarude") || pokemon.contains("Calyrex") ||
-                pokemon.contains("Glastrier") || pokemon.contains("Spectrier") || pokemon.contains("Regieleki") || pokemon.contains("Regidrago");
+                pokemon.contains("Glastrier") || pokemon.contains("Spectrier") || pokemon.contains("Regieleki") || pokemon.contains("Regidrago") || pokemon.contains("Kubfu") || pokemon.contains("Urshifu");
     }
 }

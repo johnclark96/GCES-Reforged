@@ -1,5 +1,7 @@
 package com.lypaka.gces.gottacatchemsmall.Listeners;
 
+import com.google.common.reflect.TypeToken;
+import com.lypaka.gces.gottacatchemsmall.Config.ConfigManager;
 import com.lypaka.gces.gottacatchemsmall.Utils.AccountHandler;
 import com.lypaka.gces.gottacatchemsmall.Utils.FancyText;
 import com.lypaka.gces.gottacatchemsmall.Utils.TierHandler;
@@ -10,6 +12,9 @@ import com.pixelmonmod.pixelmon.config.PixelmonConfig;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.world.World;
+
+import java.util.List;
 
 public class LevelingListener {
 
@@ -17,6 +22,13 @@ public class LevelingListener {
     public void onLevelUp (LevelUpEvent event) throws ObjectMappingException {
 
         Player player = (Player) event.player;
+        if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+
+            List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+            World world = player.getWorld();
+            if (worlds.contains(world.getName())) return;
+
+        }
         int pokeLevel = event.pokemon.getPokemon().getLevel();
         int level = AccountHandler.getLevelTier(player);
 
@@ -56,6 +68,13 @@ public class LevelingListener {
     public void onRareCandy (RareCandyEvent event) throws ObjectMappingException {
 
         Player player = (Player) event.player;
+        if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+
+            List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+            World world = player.getWorld();
+            if (worlds.contains(world.getName())) return;
+
+        }
         int pokeLevel = event.pixelmon.getLvl().getLevel();
         int level = AccountHandler.getLevelTier(player);
 
@@ -93,6 +112,13 @@ public class LevelingListener {
     public void onEXPGain (ExperienceGainEvent event) throws ObjectMappingException {
 
         Player player = (Player) event.pokemon.getPlayerOwner();
+        if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+
+            List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+            World world = player.getWorld();
+            if (worlds.contains(world.getName())) return;
+
+        }
         int level = AccountHandler.getLevelTier(player);
         int pokeLevel = event.pokemon.getLevel();
 

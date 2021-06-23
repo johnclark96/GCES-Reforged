@@ -16,6 +16,8 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 @Plugin(
         id = "gottacatchemsmall",
@@ -53,18 +55,13 @@ public class GCES {
         Sponge.getEventManager().registerListeners(this, new TradeListener());
         Sponge.getEventManager().registerListeners(this, new JoinListener());
         GCESAdminCommand.registerAdminCommands();
-        if (ConfigManager.getConfigNode(2, "Battles").isVirtual()) {
+        if (ConfigManager.getConfigNode(7, "World-Blacklist").isVirtual()) {
 
-            ConfigManager.getConfigNode(2, "Battles", "Restrict-Battles").setValue(true);
-
-        }
-        if (ConfigManager.getConfigNode(3, "Trading", "Legendaries").isVirtual()) {
-
-            ConfigManager.getConfigNode(3, "Trading", "Legendaries", "Enabled").setValue(true);
-            ConfigManager.getConfigNode(3, "Trading", "Legendaries", "Message").setValue("&4You have not unlocked the ability to receive this legendary Pokemon yet!");
+            List<String> emptyList = new ArrayList<>();
+            ConfigManager.getConfigNode(7, "World-Blacklist").setValue(emptyList);
+            ConfigManager.save();
 
         }
-        ConfigManager.save();
 
         if (Sponge.getPluginManager().getPlugin("pixelskills").isPresent()) {
 

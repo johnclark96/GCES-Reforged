@@ -1,5 +1,7 @@
 package com.lypaka.gces.gottacatchemsmall.Listeners;
 
+import com.google.common.reflect.TypeToken;
+import com.lypaka.gces.gottacatchemsmall.Config.ConfigManager;
 import com.lypaka.gces.gottacatchemsmall.Utils.AccountHandler;
 import com.lypaka.gces.gottacatchemsmall.Utils.FancyText;
 import com.lypaka.gces.gottacatchemsmall.Utils.TierHandler;
@@ -14,12 +16,22 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.world.World;
+
+import java.util.List;
 
 public class TradeListener {
 
     @Listener
     public void onInteract (InteractBlockEvent.Secondary.MainHand event, @Root Player player) throws ObjectMappingException {
 
+        if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+
+            List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+            World world = player.getWorld();
+            if (worlds.contains(world.getName())) return;
+
+        }
         if (event.getTargetBlock().getState().getType().getName().contains("trade_machine")) {
 
             if (!AccountHandler.hasPermission(player, TierHandler.getTradePerm())) {
@@ -49,6 +61,13 @@ public class TradeListener {
             if (event.receiveType.equals(ReceiveType.Trade)) {
 
                 Player player = (Player) event.player;
+                if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+
+                    List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+                    World world = player.getWorld();
+                    if (worlds.contains(world.getName())) return;
+
+                }
                 int lvl = event.pokemon.getLevel();
                 Pokemon pokemon = event.pokemon;
 
@@ -78,6 +97,13 @@ public class TradeListener {
         if (TierHandler.restrictLegendaries()) {
 
             Player player = (Player) event.player;
+            if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+
+                List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+                World world = player.getWorld();
+                if (worlds.contains(world.getName())) return;
+
+            }
             EntityPixelmon pokemon = event.pokemon.getPixelmonIfExists();
 
             if (!AccountHandler.hasPermission(player, TierHandler.getLegendaryPermission())) {

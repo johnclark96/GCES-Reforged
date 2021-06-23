@@ -221,18 +221,34 @@ public class GCESAdminCommand {
 
         CommandSpec check = CommandSpec.builder()
                 .permission("gces.command.list")
+                .arguments(
+                        GenericArguments.optional(GenericArguments.player(Text.of("player")))
+                )
                 .executor((sender, context) -> {
 
-                    Player player = (Player) sender;
+                    Player player;
+                    if (context.getOne("player").isPresent() && sender.hasPermission("gces.command.list.others")) {
+
+                        player = (Player) context.getOne("player").get();
+
+                    } else {
+
+                        player = (Player) sender;
+
+                    }
                     int catchLvl = 0;
-                    int levelLvl = 0;
                     try {
                         catchLvl = AccountHandler.getCatchTier(player);
+                    } catch (ObjectMappingException e) {
+                        e.printStackTrace();
+                    }
+                    int levelLvl = 0;
+                    try {
                         levelLvl = AccountHandler.getLevelTier(player);
                     } catch (ObjectMappingException e) {
                         e.printStackTrace();
                     }
-                    player.sendMessage(Text.of(TextColors.YELLOW, "Catch level = " + catchLvl + ". Level level = " + levelLvl));
+                    sender.sendMessage(Text.of(TextColors.YELLOW, "Catch level = " + catchLvl + ". Level level = " + levelLvl));
 
                     return CommandResult.success();
                 })
