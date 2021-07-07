@@ -18,17 +18,17 @@ public class AccountHandler {
 
     /**--------------------------------Getters--------------------------------**/
 
-    public static int getCatchTier (Player player) throws ObjectMappingException {
+    public static int getCatchTier (Player player, int index) throws ObjectMappingException {
 
-        String mode = ConfigManager.getConfigNode(6, "Catching-Levels-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Catching-Levels-Mode").getString();
         if (mode.equalsIgnoreCase("levels")) {
 
             return ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Levels", "Catching-Tier").getInt();
 
         } else {
 
-            Map<String, Map<String, String>> map = ConfigManager.getConfigNode(0, "Level", "Tiers").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
-            Map<String, String> permissionMap = ConfigManager.getConfigNode(6, "Catching-Levels-Permissions").getValue(new TypeToken<Map<String, String>>() {});
+            Map<String, Map<String, String>> map = ConfigManager.getConfigNode(index, 0, "Level", "Tiers").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
+            Map<String, String> permissionMap = ConfigManager.getConfigNode(index, 6, "Catching-Levels-Permissions").getValue(new TypeToken<Map<String, String>>() {});
             int size = map.size();
             for (int i = 1; i <= size; i++) {
 
@@ -46,17 +46,17 @@ public class AccountHandler {
 
     }
 
-    public static int getLevelTier (Player player) throws ObjectMappingException {
+    public static int getLevelTier (Player player, int index) throws ObjectMappingException {
 
-        String mode = ConfigManager.getConfigNode(6, "Leveling-Levels-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Leveling-Levels-Mode").getString();
         if (mode.equalsIgnoreCase("levels")) {
 
             return ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Levels", "Leveling-Tier").getInt();
 
         } else {
 
-            Map<String, Map<String, String>> map = ConfigManager.getConfigNode(2, "Leveling", "Tiers").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
-            Map<String, String> permissionMap = ConfigManager.getConfigNode(6, "Leveling-Levels-Permissions").getValue(new TypeToken<Map<String, String>>() {});
+            Map<String, Map<String, String>> map = ConfigManager.getConfigNode(index, 2, "Leveling", "Tiers").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
+            Map<String, String> permissionMap = ConfigManager.getConfigNode(index, 6, "Leveling-Levels-Permissions").getValue(new TypeToken<Map<String, String>>() {});
             int size = map.size();
             for (int i = 1; i <= size; i++) {
 
@@ -101,38 +101,45 @@ public class AccountHandler {
 
     }
 
-    public static void addPermission (Player player, String permission) throws ObjectMappingException {
+    public static void addPermission (Player player, String permission, int index) throws ObjectMappingException {
 
-        String mode = ConfigManager.getConfigNode(6, "Permission-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Permission-Mode").getString();
 
-        if (mode.equalsIgnoreCase("gces")) {
+        if (!AccountHandler.hasPermission(player, permission, index)) {
 
-            ArrayList<String> list = new ArrayList<String>(ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Unlocked-Permissions").getList(TypeToken.of(String.class)));
-            list.add(permission);
-            ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Unlocked-Permissions").setValue(list);
+            if (mode.equalsIgnoreCase("gces")) {
 
-        } else {
+                ArrayList<String> list = new ArrayList<String>(ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Unlocked-Permissions").getList(TypeToken.of(String.class)));
+                list.add(permission);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Unlocked-Permissions").setValue(list);
 
-            Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "lp user " + player.getName() + " permission set " + permission + " true");
+            } else {
+
+                Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "lp user " + player.getName() + " permission set " + permission + " true");
+
+            }
 
         }
 
-
     }
 
-    public static void removePermission (Player player, String permission) throws ObjectMappingException, IOException {
+    public static void removePermission (Player player, String permission, int index) throws ObjectMappingException, IOException {
 
-        String mode = ConfigManager.getConfigNode(6, "Permission-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Permission-Mode").getString();
 
-        if (mode.equalsIgnoreCase("gces")) {
+        if (AccountHandler.hasPermission(player, permission, index)) {
 
-            ArrayList<String> list = new ArrayList<String>(ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Unlocked-Permissions").getList(TypeToken.of(String.class)));
-            list.remove(permission);
-            ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Unlocked-Permissions").setValue(list);
+            if (mode.equalsIgnoreCase("gces")) {
 
-        } else {
+                ArrayList<String> list = new ArrayList<String>(ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Unlocked-Permissions").getList(TypeToken.of(String.class)));
+                list.remove(permission);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Unlocked-Permissions").setValue(list);
 
-            Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "lp user " + player.getName() + " permission unset " + permission);
+            } else {
+
+                Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "lp user " + player.getName() + " permission unset " + permission);
+
+            }
 
         }
 
@@ -140,9 +147,9 @@ public class AccountHandler {
 
     /**----------------------------------Misc--------------------------------**/
 
-    public static boolean hasPermission (Player player, String permission) throws ObjectMappingException {
+    public static boolean hasPermission (Player player, String permission, int index) throws ObjectMappingException {
 
-        String mode = ConfigManager.getConfigNode(6, "Permission-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Permission-Mode").getString();
 
         if (mode.equalsIgnoreCase("gces")) {
 
@@ -156,12 +163,12 @@ public class AccountHandler {
 
     }
 
-    public static void levelUpCatchingTier (Player player) throws ObjectMappingException {
+    public static void levelUpCatchingTier (Player player, int index) throws ObjectMappingException {
 
 
-        String mode = ConfigManager.getConfigNode(6, "Permission-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Permission-Mode").getString();
         int level = ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Levels", "Catching-Tier").getInt();
-        if (level < TierHandler.getMaxTierLevel("Catching")) {
+        if (level < TierHandler.getMaxTierLevel(index, "Catching")) {
 
             if (mode.equalsIgnoreCase("gces")) {
 
@@ -170,7 +177,7 @@ public class AccountHandler {
 
             } else {
 
-                Map<String, String> cTiers = ConfigManager.getConfigNode(6, "Catching-Levels-Permissions").getValue(new TypeToken<Map<String, String>>() {});
+                Map<String, String> cTiers = ConfigManager.getConfigNode(index, 6, "Catching-Levels-Permissions").getValue(new TypeToken<Map<String, String>>() {});
                 int totalTiers = cTiers.size();
                 String currentPermission = cTiers.get("Tier-" + level);
                 int nextLevel = level + 1;
@@ -192,12 +199,12 @@ public class AccountHandler {
 
     }
 
-    public static void levelUpLevelingTier (Player player) throws ObjectMappingException {
+    public static void levelUpLevelingTier (Player player, int index) throws ObjectMappingException {
 
         int level = ConfigManager.getPlayerConfigNode(player.getUniqueId(),"Levels", "Leveling-Tier").getInt();
-        String mode = ConfigManager.getConfigNode(6, "Permission-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Permission-Mode").getString();
 
-        if (level < TierHandler.getMaxTierLevel("Leveling")) {
+        if (level < TierHandler.getMaxTierLevel(index, "Leveling")) {
 
             if (mode.equalsIgnoreCase("gces")) {
 
@@ -206,7 +213,7 @@ public class AccountHandler {
 
             } else {
 
-                Map<String, String> lTiers = ConfigManager.getConfigNode(6, "Leveling-Levels-Permissions").getValue(new TypeToken<Map<String, String>>() {
+                Map<String, String> lTiers = ConfigManager.getConfigNode(index, 6, "Leveling-Levels-Permissions").getValue(new TypeToken<Map<String, String>>() {
                 });
                 int totalTiers = lTiers.size();
                 String currentPermission = lTiers.get("Tier-" + level);
@@ -230,15 +237,15 @@ public class AccountHandler {
 
     }
 
-    public static void levelUpEvolvingTier (Player player) throws ObjectMappingException, IOException {
+    public static void levelUpEvolvingTier (Player player, int index) throws ObjectMappingException, IOException {
 
-        String mode = ConfigManager.getConfigNode(6, "Permission-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Permission-Mode").getString();
         if (mode.equalsIgnoreCase("gces")) {
 
             if (getPermissions(player).contains("gces.evolving.middle")) {
 
-                removePermission(player, "gces.evolving.middle");
-                addPermission(player, "gces.evolving.final");
+                removePermission(player, "gces.evolving.middle", index);
+                addPermission(player, "gces.evolving.final", index);
 
             }
 
@@ -256,20 +263,20 @@ public class AccountHandler {
 
     }
 
-    public static void levelUpCatchingEvoStage (Player player) throws ObjectMappingException, IOException {
+    public static void levelUpCatchingEvoStage (Player player, int index) throws ObjectMappingException, IOException {
 
-        String mode = ConfigManager.getConfigNode(6, "Permission-Mode").getString();
+        String mode = ConfigManager.getConfigNode(index, 6, "Permission-Mode").getString();
         if (mode.equalsIgnoreCase("gces")) {
 
             if (getPermissions(player).contains("gces.catching.firststage")) {
 
-                removePermission(player, "gces.catching.firststage");
-                addPermission(player, "gces.catching.middlestage");
+                removePermission(player, "gces.catching.firststage", index);
+                addPermission(player, "gces.catching.middlestage", index);
 
             } else if (getPermissions(player).contains("gces.catching.middlestage")) {
 
-                removePermission(player, "gces.catching.middlestage");
-                addPermission(player, "gces.catching.finalstage");
+                removePermission(player, "gces.catching.middlestage", index);
+                addPermission(player, "gces.catching.finalstage", index);
 
             }
 
@@ -291,5 +298,17 @@ public class AccountHandler {
 
     }
 
-}
+    public static void setDifficulty (Player player, String diff) {
 
+        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Difficulty").setValue(diff);
+        ConfigManager.savePlayer(player.getUniqueId());
+
+    }
+
+    public static String getDifficulty (Player player) {
+
+        return ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Difficulty").getString();
+
+    }
+
+}

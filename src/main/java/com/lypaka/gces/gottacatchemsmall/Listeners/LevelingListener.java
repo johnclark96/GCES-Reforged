@@ -1,6 +1,7 @@
 package com.lypaka.gces.gottacatchemsmall.Listeners;
 
 import com.google.common.reflect.TypeToken;
+import com.lypaka.gces.gottacatchemsmall.Config.ConfigGetters;
 import com.lypaka.gces.gottacatchemsmall.Config.ConfigManager;
 import com.lypaka.gces.gottacatchemsmall.Utils.AccountHandler;
 import com.lypaka.gces.gottacatchemsmall.Utils.FancyText;
@@ -22,35 +23,38 @@ public class LevelingListener {
     public void onLevelUp (LevelUpEvent event) throws ObjectMappingException {
 
         Player player = (Player) event.player;
-        if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+        if (ConfigGetters.getPlayerDifficulty(player).equalsIgnoreCase("none")) return;
 
-            List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+        int index = ConfigGetters.getIndexFromString(ConfigGetters.getPlayerDifficulty(player));
+        if (!ConfigManager.getConfigNode(index, 6, "World-Blacklist").isEmpty()) {
+
+            List<String> worlds = ConfigManager.getConfigNode(index, 6, "World-Blacklist").getList(TypeToken.of(String.class));
             World world = player.getWorld();
             if (worlds.contains(world.getName())) return;
 
         }
-        int pokeLevel = event.pokemon.getPokemon().getLevel();
-        int level = AccountHandler.getLevelTier(player);
+        int pokeLevel = event.pokemon.getLevel();
+        int level = AccountHandler.getLevelTier(player, index);
 
         if (pokeLevel < PixelmonConfig.maxLevel) {
 
-            if (!AccountHandler.hasPermission(player, TierHandler.getLevelPermission())) {
+            if (!AccountHandler.hasPermission(player, TierHandler.getLevelPermission(index), index)) {
 
-                if (!TierHandler.getLevelPermission().equalsIgnoreCase("none")) {
+                if (!TierHandler.getLevelPermission(index).equalsIgnoreCase("none")) {
 
                     event.setCanceled(true);
-                    player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(0)));
+                    player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(index, 0)));
 
                 }
 
             } else {
 
-                if (TierHandler.isLevelingSystemEnabled()) {
+                if (TierHandler.isLevelingSystemEnabled(index)) {
 
-                    if (pokeLevel >= TierHandler.getMaxLvlLevel(level)) {
+                    if (pokeLevel >= TierHandler.getMaxLvlLevel(index, level)) {
 
                         event.setCanceled(true);
-                        player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(level)));
+                        player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(index, level)));
 
                     }
 
@@ -68,35 +72,39 @@ public class LevelingListener {
     public void onRareCandy (RareCandyEvent event) throws ObjectMappingException {
 
         Player player = (Player) event.player;
-        if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+        if (ConfigGetters.getPlayerDifficulty(player).equalsIgnoreCase("none")) return;
 
-            List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+        int index = ConfigGetters.getIndexFromString(ConfigGetters.getPlayerDifficulty(player));
+        if (!ConfigManager.getConfigNode(index, 6, "World-Blacklist").isEmpty()) {
+
+            List<String> worlds = ConfigManager.getConfigNode(index, 6, "World-Blacklist").getList(TypeToken.of(String.class));
             World world = player.getWorld();
             if (worlds.contains(world.getName())) return;
 
         }
-        int pokeLevel = event.pixelmon.getLvl().getLevel();
-        int level = AccountHandler.getLevelTier(player);
+        //int pokeLevel = event.getPokemon.level.getLevel();
+        int pokeLevel = event.pixelmon.getPokemonData().getLevel();
+        int level = AccountHandler.getLevelTier(player, index);
 
         if (pokeLevel < PixelmonConfig.maxLevel) {
 
-            if (!AccountHandler.hasPermission(player, TierHandler.getLevelPermission())) {
+            if (!AccountHandler.hasPermission(player, TierHandler.getLevelPermission(index), index)) {
 
-                if (!TierHandler.getLevelPermission().equalsIgnoreCase("none")) {
+                if (!TierHandler.getLevelPermission(index).equalsIgnoreCase("none")) {
 
                     event.setCanceled(true);
-                    player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(0)));
+                    player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(index, 0)));
 
                 }
 
             } else {
 
-                if (TierHandler.isLevelingSystemEnabled()) {
+                if (TierHandler.isLevelingSystemEnabled(index)) {
 
-                    if (pokeLevel >= TierHandler.getMaxLvlLevel(level)) {
+                    if (pokeLevel >= TierHandler.getMaxLvlLevel(index, level)) {
 
                         event.setCanceled(true);
-                        player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(level)));
+                        player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(index, level)));
 
                     }
 
@@ -112,24 +120,27 @@ public class LevelingListener {
     public void onEXPGain (ExperienceGainEvent event) throws ObjectMappingException {
 
         Player player = (Player) event.pokemon.getPlayerOwner();
-        if (!ConfigManager.getConfigNode(7, "World-Blacklist").isEmpty()) {
+        if (ConfigGetters.getPlayerDifficulty(player).equalsIgnoreCase("none")) return;
 
-            List<String> worlds = ConfigManager.getConfigNode(7, "World-Blacklist").getList(TypeToken.of(String.class));
+        int index = ConfigGetters.getIndexFromString(ConfigGetters.getPlayerDifficulty(player));
+        if (!ConfigManager.getConfigNode(index, 6, "World-Blacklist").isEmpty()) {
+
+            List<String> worlds = ConfigManager.getConfigNode(index, 6, "World-Blacklist").getList(TypeToken.of(String.class));
             World world = player.getWorld();
             if (worlds.contains(world.getName())) return;
 
         }
-        int level = AccountHandler.getLevelTier(player);
+        int level = AccountHandler.getLevelTier(player, index);
         int pokeLevel = event.pokemon.getLevel();
 
         if (pokeLevel < PixelmonConfig.maxLevel) {
 
-            if (TierHandler.isLevelingSystemEnabled()) {
+            if (TierHandler.isLevelingSystemEnabled(index)) {
 
-                if (pokeLevel >= TierHandler.getMaxLvlLevel(level)) {
+                if (pokeLevel >= TierHandler.getMaxLvlLevel(index, level)) {
 
                     event.setExperience(0);
-                    player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(level).replace("Pokemon", event.pokemon.getBaseStats().pixelmonName)));
+                    player.sendMessage(FancyText.getFancyText(TierHandler.getLvlMessage(index, level).replace("Pokemon", event.pokemon.getBaseStats().pixelmonName)));
 
                 }
 

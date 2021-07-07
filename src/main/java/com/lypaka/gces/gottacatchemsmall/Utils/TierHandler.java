@@ -3,7 +3,6 @@ package com.lypaka.gces.gottacatchemsmall.Utils;
 import com.google.common.reflect.TypeToken;
 import com.lypaka.gces.gottacatchemsmall.Config.ConfigManager;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 import java.util.List;
@@ -11,13 +10,13 @@ import java.util.Map;
 
 public class TierHandler {
 
-    public static boolean areShiniesRestricted() {
+    public static boolean areShiniesRestricted (int index) {
 
-        return ConfigManager.getConfigNode(0, "Shiny-Pokemon", "Restrict-Shinies-By-Level").getBoolean();
+        return ConfigManager.getConfigNode(index, 0, "Shiny-Pokemon", "Restrict-Shinies-By-Level").getBoolean();
 
     }
 
-    public static int getMaxCatchLevel (int tierNum) {
+    public static int getMaxCatchLevel (int index, int tierNum) {
 
         if (tierNum == 0) {
 
@@ -25,71 +24,71 @@ public class TierHandler {
 
         } else {
 
-            return ConfigManager.getConfigNode(0, "Level", "Tiers", "Tier-" + tierNum, "Max-Level").getInt();
+            return ConfigManager.getConfigNode(index, 0, "Level", "Tiers", "Tier-" + tierNum, "Max-Level").getInt();
 
         }
 
     }
 
-    public static String getCatchLevelMessage (int tierNum) {
+    public static String getCatchLevelMessage (int index, int tierNum) {
 
         if (tierNum == 0) {
 
-            return ConfigManager.getConfigNode(0, "Level", "Restriction-Default-Message").getString();
+            return ConfigManager.getConfigNode(index, 0, "Level", "Restriction-Default-Message").getString();
 
         } else {
 
-            return ConfigManager.getConfigNode(0, "Level", "Tiers", "Tier-" + tierNum, "Message").getString();
+            return ConfigManager.getConfigNode(index, 0, "Level", "Tiers", "Tier-" + tierNum, "Message").getString();
 
         }
 
     }
 
-    public static String getCatchLegendaryMessage() {
+    public static String getCatchLegendaryMessage (int index) {
 
-        return ConfigManager.getConfigNode(0, "Legendary-Pokemon", "Restriction-Default-Message").getString();
-
-    }
-
-    public static String getCatchEvoStageMessage() {
-
-        return ConfigManager.getConfigNode(0, "Evolution-Stage", "Restriction-Message").getString();
+        return ConfigManager.getConfigNode(index, 0, "Legendary-Pokemon", "Restriction-Default-Message").getString();
 
     }
 
-    public static String getCatchPermission() {
+    public static String getCatchEvoStageMessage (int index) {
 
-        return ConfigManager.getConfigNode(0, "Level", "Permission").getString();
-
-    }
-
-    public static String getLegendaryPermission() {
-
-        return ConfigManager.getConfigNode(0, "Legendary-Pokemon", "Unlock-Legendary-Pokemon").getString();
+        return ConfigManager.getConfigNode(index, 0, "Evolution-Stage", "Restriction-Message").getString();
 
     }
 
-    public static boolean areLegendariesRestricted() {
+    public static String getCatchPermission (int index) {
 
-        return ConfigManager.getConfigNode(0, "Legendary-Pokemon", "Restrict-Catching-Legendary-Pokemon").getBoolean();
-
-    }
-
-    public static boolean areEvoStagesRestricted() {
-
-        return ConfigManager.getConfigNode(0, "Evolution-Stage", "Restrict-By-Evolution-Stage").getBoolean();
+        return ConfigManager.getConfigNode(index, 0, "Level", "Permission").getString();
 
     }
 
-    public static boolean isCatchLevelAccessRestricted() {
+    public static String getLegendaryPermission (int index) {
 
-        return !ConfigManager.getConfigNode(0, "Level", "Permission").getString().equalsIgnoreCase("none");
+        return ConfigManager.getConfigNode(index, 0, "Legendary-Pokemon", "Unlock-Legendary-Pokemon").getString();
 
     }
 
-    public static boolean isCatchLevelRestricted() {
+    public static boolean areLegendariesRestricted (int index) {
 
-        return ConfigManager.getConfigNode(0, "Level", "Restrict-Levels-By-Tier").getBoolean();
+        return ConfigManager.getConfigNode(index, 0, "Legendary-Pokemon", "Restrict-Catching-Legendary-Pokemon").getBoolean();
+
+    }
+
+    public static boolean areEvoStagesRestricted (int index) {
+
+        return ConfigManager.getConfigNode(index, 0, "Evolution-Stage", "Restrict-By-Evolution-Stage").getBoolean();
+
+    }
+
+    public static boolean isCatchLevelAccessRestricted (int index) {
+
+        return !ConfigManager.getConfigNode(index, 0, "Level", "Permission").getString().equalsIgnoreCase("none");
+
+    }
+
+    public static boolean isCatchLevelRestricted (int index) {
+
+        return ConfigManager.getConfigNode(index, 0, "Level", "Restrict-Levels-By-Tier").getBoolean();
 
     }
 
@@ -97,7 +96,7 @@ public class TierHandler {
 
     /**------------------------------------Leveling Tiers----------------------------------------------------**/
 
-    public static int getMaxLvlLevel (int tierNum) {
+    public static int getMaxLvlLevel (int index, int tierNum) {
 
         if (tierNum == 0) {
 
@@ -105,93 +104,93 @@ public class TierHandler {
 
         } else {
 
-            return ConfigManager.getConfigNode(2, "Leveling", "Tiers", "Tier-" + tierNum, "Max-Level").getInt();
+            return ConfigManager.getConfigNode(index, 2, "Leveling", "Tiers", "Tier-" + tierNum, "Max-Level").getInt();
 
         }
 
     }
 
-    public static String getLvlMessage (int tierNum) {
+    public static String getLvlMessage (int index, int tierNum) {
 
         if (tierNum == 0) {
 
-            return ConfigManager.getConfigNode(2, "Leveling", "Restriction-Default-Message").getString();
+            return ConfigManager.getConfigNode(index, 2, "Leveling", "Restriction-Default-Message").getString();
 
         } else {
 
-            return ConfigManager.getConfigNode(2, "Leveling", "Tiers", "Tier-" + tierNum, "Message").getString();
+            return ConfigManager.getConfigNode(index, 2, "Leveling", "Tiers", "Tier-" + tierNum, "Message").getString();
 
         }
 
     }
 
-    public static String getLevelPermission() {
+    public static String getLevelPermission (int index) {
 
-        return ConfigManager.getConfigNode(2, "Leveling", "Permission").getString();
-
-    }
-
-    public static boolean isLevelingSystemEnabled() {
-
-        return ConfigManager.getConfigNode(2, "Leveling", "Enable-Progression-Based-Leveling-System").getBoolean();
+        return ConfigManager.getConfigNode(index, 2, "Leveling", "Permission").getString();
 
     }
 
-    public static boolean restrictBattles() {
+    public static boolean isLevelingSystemEnabled (int index) {
 
-        return ConfigManager.getConfigNode(2, "Battles", "Restrict-Battles").getBoolean();
+        return ConfigManager.getConfigNode(index, 2, "Leveling", "Enable-Progression-Based-Leveling-System").getBoolean();
 
     }
 
-    public static String getBattleMessage() {
+    public static boolean restrictBattles (int index) {
 
-        return ConfigManager.getConfigNode(2, "Battles", "Restrict-Battles-Message").getString();
+        return ConfigManager.getConfigNode(index, 2, "Battles", "Restrict-Battles").getBoolean();
+
+    }
+
+    public static String getBattleMessage (int index) {
+
+        return ConfigManager.getConfigNode(index, 2, "Battles", "Restrict-Battles-Message").getString();
 
     }
 
     /**--------------------------------------Trading Tiers-------------------------------------**/
 
-    public static String getTierBase() {
+    public static String getTierBase (int index) {
 
-        return ConfigManager.getConfigNode(3, "Trading", "Lock-Trade-Tiers-By").getString();
-
-    }
-
-    public static String getTradePerm() {
-
-        return ConfigManager.getConfigNode(3, "Trading", "Permission").getString();
+        return ConfigManager.getConfigNode(index, 3, "Trading", "Lock-Trade-Tiers-By").getString();
 
     }
 
-    public static boolean areTradesModified() {
+    public static String getTradePerm (int index) {
 
-        return ConfigManager.getConfigNode(3, "Trading", "Enable-Progression-Based-Trade-System").getBoolean();
-
-    }
-
-    public static String getTradeMessage() {
-
-        return ConfigManager.getConfigNode(3, "Trading", "Restriction-Default-Message").getString();
+        return ConfigManager.getConfigNode(index, 3, "Trading", "Permission").getString();
 
     }
 
-    public static boolean restrictLegendaries() {
+    public static boolean areTradesModified (int index) {
 
-        return ConfigManager.getConfigNode(3, "Trading", "Legendaries", "Enabled").getBoolean();
+        return ConfigManager.getConfigNode(index, 3, "Trading", "Enable-Progression-Based-Trade-System").getBoolean();
 
     }
 
-    public static String getLegendaryMessage() {
+    public static String getTradeMessage (int index) {
 
-        return ConfigManager.getConfigNode(3, "Trading", "Legendaries", "Message").getString();
+        return ConfigManager.getConfigNode(index, 3, "Trading", "Restriction-Default-Message").getString();
+
+    }
+
+    public static boolean restrictLegendaries (int index) {
+
+        return ConfigManager.getConfigNode(index, 3, "Trading", "Legendaries", "Enabled").getBoolean();
+
+    }
+
+    public static String getLegendaryMessage (int index) {
+
+        return ConfigManager.getConfigNode(index, 3, "Trading", "Legendaries", "Message").getString();
 
     }
 
     /**---------------------------------------Evolution Tiers-----------------------------------**/
 
-    public static boolean areEvolutionsRestricted() {
+    public static boolean areEvolutionsRestricted (int index) {
 
-        return ConfigManager.getConfigNode(1, "Evolving", "Restrict-Evolutions").getBoolean();
+        return ConfigManager.getConfigNode(index, 1, "Evolving", "Restrict-Evolutions").getBoolean();
 
     }
 
@@ -219,78 +218,100 @@ public class TierHandler {
         return "None";
     }
 
-    public static String getEvoPermission() {
+    public static String getEvoPermission (int index) {
 
-        return ConfigManager.getConfigNode(1, "Evolving", "Permission").getString();
-
-    }
-
-    public static String getEvoRestrictionMessage() {
-
-        return ConfigManager.getConfigNode(1, "Evolving", "Restriction-Default-Message").getString();
+        return ConfigManager.getConfigNode(index, 1, "Evolving", "Permission").getString();
 
     }
 
-    public static String getMegaPerm() {
+    public static String getEvoRestrictionMessage (int index) {
 
-        return ConfigManager.getConfigNode(1, "Mega-Evolving", "Unlock-Mega-Evolving").getString();
-
-    }
-
-    public static String getMegaMessage() {
-
-        return ConfigManager.getConfigNode(1, "Mega-Evolving", "Restriction-Message").getString();
+        return ConfigManager.getConfigNode(index, 1, "Evolving", "Restriction-Default-Message").getString();
 
     }
 
-    public static boolean areMegasRestricted() {
+    public static String getMegaPerm (int index) {
 
-        return ConfigManager.getConfigNode(1, "Mega-Evolving", "Restrict-Mega-Evolutions").getBoolean();
+        return ConfigManager.getConfigNode(index, 1, "Mega-Evolving", "Unlock-Mega-Evolving").getString();
+
+    }
+
+    public static String getMegaMessage (int index) {
+
+        return ConfigManager.getConfigNode(index, 1, "Mega-Evolving", "Restriction-Message").getString();
+
+    }
+
+    public static boolean areMegasRestricted (int index) {
+
+        return ConfigManager.getConfigNode(index, 1, "Mega-Evolving", "Restrict-Mega-Evolutions").getBoolean();
 
     }
 
     /**--------------------------------------Z-Moves------------------------------------**/
 
-    public static boolean restrictDynamaxing() {
+    public static boolean restrictZMoves (int index) {
 
-        return ConfigManager.getConfigNode(4, "Dynamaxing", "Restrict-Dynamaxing").getBoolean();
-
-    }
-
-    public static String getDynamaxingMessage() {
-
-        return ConfigManager.getConfigNode(4, "Dynamaxing", "Restriction-Message").getString();
+        return ConfigManager.getConfigNode(index, 4, "Z-Moves", "Restrict-Z-Moves").getBoolean();
 
     }
 
-    public static String getDynamaxingPermission() {
+    public static String getZMovesMessage (int index) {
 
-        return ConfigManager.getConfigNode(4, "Dynamaxing", "Unlock-Z-Moves").getString();
+        return ConfigManager.getConfigNode(index, 4, "Z-Moves", "Restriction-Message").getString();
 
     }
 
-    public static boolean unlockDynamaxingOnJoin() {
+    public static String getZMovesPermission (int index) {
 
-        return ConfigManager.getConfigNode(4, "Dynamaxing", "Unlock-Permission-Given-On-Join").getBoolean();
+        return ConfigManager.getConfigNode(index, 4, "Z-Moves", "Unlock-Z-Moves").getString();
+
+    }
+
+    public static boolean unlockZMovesOnJoin (int index) {
+
+        return ConfigManager.getConfigNode(index, 4, "Z-Moves", "Unlock-Permission-Given-On-Join").getBoolean();
+
+    }
+
+    /** ------------------------------------Dynamaxing-----------------------------------**/
+
+    public static boolean restrictDynamaxing (int index) {
+
+        return ConfigManager.getConfigNode(index, 8, "Dynamaxing", "Restrict-Dynamaxing").getBoolean();
+
+    }
+
+    public static String getDynamaxingMessage (int index) {
+
+        return ConfigManager.getConfigNode(index, 8, "Dynamaxing", "Restriction-Message").getString();
+
+    }
+
+    public static String getDynamaxingPermission (int index) {
+
+        return ConfigManager.getConfigNode(index, 8, "Dynamaxing", "Unlock-Dynamaxing").getString();
+
+    }
+
+    public static boolean unlockDynamaxingOnJoin (int index) {
+
+        return ConfigManager.getConfigNode(index, 8, "Dynamaxing", "Unlock-Permission-Given-On-Join").getBoolean();
 
     }
 
     /**-------------------------------------General--------------------------------------**/
 
-    public static String getStringFromConfig (ConfigurationNode node) {
-        return node.getString();
-    }
+    public static int getMaxTierLevel (int index, String tier) throws ObjectMappingException {
 
-    public static int getMaxTierLevel (String tier) throws ObjectMappingException {
+        if (tier.equalsIgnoreCase("Catching")) {
 
-        if (tier.equals("Catching")) {
-
-            Map<String, Map<String, String>> map = ConfigManager.getConfigNode(0, "Level", "Tiers").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
+            Map<String, Map<String, String>> map = ConfigManager.getConfigNode(index, 0, "Level", "Tiers").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
             return map.size();
 
-        } else if (tier.equals("Leveling")) {
+        } else if (tier.equalsIgnoreCase("Leveling")) {
 
-            Map<String, Map<String, String>> map = ConfigManager.getConfigNode(2, "Leveling", "Tiers").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
+            Map<String, Map<String, String>> map = ConfigManager.getConfigNode(index, 2, "Leveling", "Tiers").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
             return map.size();
 
         }
@@ -299,21 +320,21 @@ public class TierHandler {
 
     }
 
-    public static boolean doIndividualLegendaries() {
+    public static boolean doIndividualLegendaries (int index) {
 
-        return ConfigManager.getConfigNode(5, "Individual-Unlocking", "Enabled").getBoolean();
-
-    }
-
-    public static List<String> getGroups() throws ObjectMappingException {
-
-        return ConfigManager.getConfigNode(5, "Individual-Unlocking", "Permissions", "Permission-Groups").getList(TypeToken.of(String.class));
+        return ConfigManager.getConfigNode(index, 5, "Individual-Unlocking", "Enabled").getBoolean();
 
     }
 
-    public static List<String> getLegendaries (String group) throws ObjectMappingException {
+    public static List<String> getGroups (int index) throws ObjectMappingException {
 
-        return ConfigManager.getConfigNode(5, "Individual-Unlocking", "Permissions", "Unlock", group).getList(TypeToken.of(String.class));
+        return ConfigManager.getConfigNode(index, 5, "Individual-Unlocking", "Permissions", "Permission-Groups").getList(TypeToken.of(String.class));
+
+    }
+
+    public static List<String> getLegendaries (int index, String group) throws ObjectMappingException {
+
+        return ConfigManager.getConfigNode(index, 5, "Individual-Unlocking", "Permissions", "Unlock", group).getList(TypeToken.of(String.class));
 
     }
 
