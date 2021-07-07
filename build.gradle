@@ -49,7 +49,6 @@ dependencies {
     compile 'com.github.codehusky:HuskyUI-Plugin:v0.6.0-PRE4'
     compileOnly fileTree(dir: 'C:\\Users\\Ryan\\Documents\\GitHub\\LIBRARIES', include: ['Reforged.jar'])
     compileOnly fileTree(dir: 'C:\\Users\\Ryan\\Documents\\GitHub\\LIBRARIES', include: ['PixelSkills-Reforged.jar'])
-    compileOnly fileTree(dir: 'C:\\Users\\Ryan\\Documents\\GitHub\\LIBRARIES', include: ['SpawnValidation-Reforged.jar'])
 
 }
 
